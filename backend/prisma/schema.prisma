@@ -1,0 +1,143 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  PARTICIPANT
+  ORGANIZER
+}
+
+enum OtpType {
+  EMAIL_VERIFICATION
+  FORGOT_PASSWORD
+  EVENT_ENTRY
+}
+
+enum EventStatus {
+  UPCOMING
+  ONGOING
+  COMPLETED
+  CANCELLED
+}
+
+enum RegistrationStatus {
+  PAYMENT_PENDING
+  PAYMENT_SUBMITTED
+  CONFIRMED
+  REJECTED
+  CANCELLED
+}
+
+enum EntryStatus {
+  NOT_ARRIVED
+  ALLOWED
+  REJECTED
+}
+
+model User {
+  id         Int      @id @default(autoincrement())
+  name       String
+  email      String   @unique
+  password   String
+  role       Role
+  isVerified Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  events        Event[]
+  registrations Registration[]
+  verifiedPayments ManualPayment[] @relation("PaymentVerifier")
+  entryLogs     EntryLog[] @relation("EntryVerifier")
+}
+
+model Event {
+  id              Int         @id @default(autoincrement())
+  title           String
+  description     String
+  venue           String
+  category        String?
+  startTime       DateTime
+  endTime         DateTime
+  maxCapacity     Int
+  bannerPublicId  String?
+  upiId           String?
+  status          EventStatus @default(UPCOMING)
+
+  organizerId     Int
+  organizer       User        @relation(fields: [organizerId], references: [id])
+
+  registrations   Registration[]
+
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+}
+
+model Registration {
+  id                 Int                @id @default(autoincrement())
+
+  participantId      Int
+  participant        User               @relation(fields: [participantId], references: [id])
+
+  eventId            Int
+  event              Event              @relation(fields: [eventId], references: [id])
+
+  registrationStatus RegistrationStatus @default(PAYMENT_PENDING)
+  entryStatus        EntryStatus        @default(NOT_ARRIVED)
+
+  payment            ManualPayment?
+  entryLogs          EntryLog[]
+
+  createdAt          DateTime           @default(now())
+  updatedAt          DateTime           @updatedAt
+
+  @@unique([participantId, eventId])
+}
+
+model ManualPayment {
+  id             Int      @id @default(autoincrement())
+
+  registrationId Int      @unique
+  registration   Registration @relation(fields: [registrationId], references: [id])
+
+  utrId          String   @unique
+  transactionId  String
+  amount         Float
+
+  status         String   @default("PENDING")
+  rejectionReason String?
+
+  verifiedById   Int?
+  verifiedBy     User?    @relation("PaymentVerifier", fields: [verifiedById], references: [id])
+
+  submittedAt    DateTime @default(now())
+  verifiedAt     DateTime?
+}
+
+model Otp {
+  id        Int      @id @default(autoincrement())
+  email     String
+  otp       String
+  type      OtpType
+  isUsed    Boolean  @default(false)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+}
+
+model EntryLog {
+  id             Int      @id @default(autoincrement())
+
+  registrationId Int
+  registration   Registration @relation(fields: [registrationId], references: [id])
+
+  verifiedById   Int
+  verifiedBy     User     @relation("EntryVerifier", fields: [verifiedById], references: [id])
+
+  otp            String
+  status         EntryStatus
+  verifiedAt     DateTime @default(now())
+}
