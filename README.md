@@ -94,9 +94,17 @@ Used as a digital event pass for entry verification.
 
 ## Event Capacity Management
 
-Each event has a maximum capacity of **60 participants**.
+Organizers can define the maximum participant capacity while creating an event.
 
-Registration is automatically closed when the capacity limit is reached.
+Examples:
+
+- Workshop: 30 Participants
+- Hackathon: 100 Participants
+- Seminar: 500 Participants
+
+The system automatically tracks available seats and prevents new registrations once the event capacity is reached.
+
+Registrations can be reopened if seats become available due to cancellation or rejection.
 
 ---
 
@@ -207,23 +215,6 @@ frontend/
 │   ├── routes/
 │   ├── App.jsx
 │   └── main.jsx
-```
-
----
-
-## Environment Variables
-
-```env
-DATABASE_URL=
-
-JWT_SECRET=
-
-EMAIL_USER=
-EMAIL_PASS=
-
-CLOUDINARY_CLOUD_NAME=
-CLOUDINARY_API_KEY=
-CLOUDINARY_API_SECRET=
 ```
 
 ---
