@@ -67,8 +67,56 @@ const loginUser = async ({ email, password }) => {
   return { user, token };
 };
 
+const forgotPasswordService = async ({ email }) => {
+  const user = await prisma.user.findUnique({
+    where: { email },
+  });
+
+  if (!user) {
+    throw new Error("User not found");
+  }
+
+  await createAndSendOtp(email, "FORGOT_PASSWORD");
+
+  return true;
+};
+
+const verifyForgotOtpService = async ({ email, otp }) => {
+  const isValid = await verifyOtp(email, otp, "FORGOT_PASSWORD");
+
+  if (!isValid) {
+    throw new Error("Invalid or expired OTP");
+  }
+
+  return true;
+};
+
+const resetPasswordService = async ({ email, newPassword }) => {
+  const user = await prisma.user.findUnique({
+    where: { email },
+  });
+
+  if (!user) {
+    throw new Error("User not found");
+  }
+
+  const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+  await prisma.user.update({
+    where: { email },
+    data: {
+      password: hashedPassword,
+    },
+  });
+
+  return true;
+};
+
 module.exports = {
   signupUser,
   verifyUserEmail,
   loginUser,
+  forgotPasswordService,
+  verifyForgotOtpService,
+  resetPasswordService,
 };

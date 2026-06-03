@@ -17,7 +17,7 @@ app.use("/api/auth", authRoutes);
 app.get("/", async (req, res) => {
   try {
     await prisma.$queryRaw`SELECT 1`;
-   
+
     res.json({
       success: true,
       message: "Database Connected Successfully",
@@ -35,4 +35,13 @@ const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
   console.log(`Server running on port http://localhost:${PORT}`);
+});
+
+
+process.on("uncaughtException", (err) => {
+  console.error("Uncaught Exception:", err);
+});
+
+process.on("unhandledRejection", (err) => {
+  console.error("Unhandled Rejection:", err);
 });

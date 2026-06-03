@@ -124,6 +124,7 @@ model Otp {
   otp       String
   type      OtpType
   isUsed    Boolean  @default(false)
+  isVerified Boolean @default(false)
   expiresAt DateTime
   createdAt DateTime @default(now())
 }
