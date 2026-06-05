@@ -8,11 +8,13 @@ const prisma = require("./config/prisma");
 const app = express();
 
 const authRoutes = require("./routes/authRoutes");
-
+const eventRoutes = require("./routes/eventRoutes");
 
 app.use(cors());
 app.use(express.json());
 app.use("/api/auth", authRoutes);
+app.use("/api/events", eventRoutes);
+
 
 app.get("/", async (req, res) => {
   try {
