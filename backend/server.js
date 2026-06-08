@@ -11,6 +11,8 @@ const authRoutes = require("./routes/authRoutes");
 const eventRoutes = require("./routes/eventRoutes");
 const registrationRoutes = require("./routes/registrationRoutes");
 const paymentRoutes = require("./routes/paymentRoutes");
+const entryRoutes = require("./routes/entryRoutes");
+
 
 app.use(cors());
 app.use(express.json());
@@ -18,7 +20,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/events", eventRoutes);
 app.use("/api/registrations", registrationRoutes);
 app.use("/api/payments", paymentRoutes);
-
+app.use("/api/entry", entryRoutes);
 
 app.get("/", async (req, res) => {
   try {
