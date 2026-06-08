@@ -9,6 +9,7 @@ const {
   registerForEvent,
   getMyRegistrations,
   cancelRegistration,
+  getEventRegistrations
 } = require("../controllers/registrationController");
 
 router.post(
@@ -30,6 +31,13 @@ router.delete(
   authMiddleware,
   roleMiddleware("PARTICIPANT"),
   cancelRegistration
+);
+
+router.get(
+  "/event/:eventId/registrations",
+  authMiddleware,
+  roleMiddleware("ORGANIZER"),
+  getEventRegistrations
 );
 
 module.exports = router;

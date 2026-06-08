@@ -101,8 +101,68 @@ const cancelRegistrationService = async (registrationId, participantId) => {
   });
 };
 
+const getEventRegistrationsService = async (
+  eventId,
+  organizerId,
+  search
+) => {
+  const event = await prisma.event.findUnique({
+    where: {
+      id: Number(eventId),
+    },
+  });
+
+  if (!event) {
+    throw new Error("Event not found");
+  }
+
+  if (event.organizerId !== organizerId) {
+    throw new Error(
+      "You are not allowed to view registrations"
+    );
+  }
+
+  return await prisma.registration.findMany({
+    where: {
+      eventId: Number(eventId),
+      participant: search
+        ? {
+            OR: [
+              {
+                name: {
+                  contains: search,
+                  mode: "insensitive",
+                },
+              },
+              {
+                email: {
+                  contains: search,
+                  mode: "insensitive",
+                },
+              },
+            ],
+          }
+        : undefined,
+    },
+    include: {
+      participant: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+        },
+      },
+      payment: true,
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+};
+  
 module.exports = {
   registerForEventService,
   getMyRegistrationsService,
   cancelRegistrationService,
+  getEventRegistrationsService,
 };

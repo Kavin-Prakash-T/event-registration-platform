@@ -2,6 +2,7 @@ const {
   registerForEventService,
   getMyRegistrationsService,
   cancelRegistrationService,
+  getEventRegistrationsService
 } = require("../services/registrationService");
 
 const registerForEvent = async (req, res) => {
@@ -56,8 +57,33 @@ const cancelRegistration = async (req, res) => {
   }
 };
 
+const getEventRegistrations = async (
+  req,
+  res
+) => {
+  try {
+    const registrations =
+      await getEventRegistrationsService(
+        req.params.eventId,
+        req.user.id,
+        req.query.search
+      );
+
+    res.status(200).json({
+      success: true,
+      registrations,
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
 module.exports = {
   registerForEvent,
   getMyRegistrations,
   cancelRegistration,
+  getEventRegistrations
 };
