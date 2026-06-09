@@ -1,16 +1,13 @@
 const Button = ({ children, variant = "primary", className = "", ...props }) => {
   const styles = {
-    primary:
-      "bg-black text-white hover:bg-gray-800",
-    secondary:
-      "bg-white text-black border border-gray-300 hover:bg-gray-100",
-    danger:
-      "bg-red-600 text-white hover:bg-red-700",
+    primary: "bg-black text-white hover:bg-gray-800",
+    secondary: "bg-white text-black border border-gray-300 hover:bg-gray-100",
+    danger: "bg-red-600 text-white hover:bg-red-700",
   };
 
   return (
     <button
-      className={`px-4 py-2 rounded-lg text-sm font-medium transition disabled:opacity-50 ${styles[variant]} ${className}`}
+      className={`rounded-lg px-4 py-2 text-sm font-medium transition disabled:opacity-50 ${styles[variant]} ${className}`}
       {...props}
     >
       {children}
