@@ -1,4 +1,4 @@
-import { CalendarDays, Clock, MapPin, Users } from "lucide-react";
+import { CalendarDays, Clock, IndianRupee, MapPin, Users } from "lucide-react";
 import { Link } from "react-router-dom";
 import Button from "./Button";
 
@@ -41,6 +41,15 @@ const EventCard = ({ event }) => {
 
         <p className="flex items-center gap-2 text-sm text-gray-600">
           <Users size={16} /> Capacity: {event.maxCapacity}
+        </p>
+
+        <p className="flex items-center gap-2 text-sm font-medium">
+          <IndianRupee size={16} />
+          {event.registrationFee ? (
+            <span className="text-black">Fee: ₹{event.registrationFee}</span>
+          ) : (
+            <span className="text-green-600">Free</span>
+          )}
         </p>
 
         <Link to={`/participant/events/${event.id}`}>

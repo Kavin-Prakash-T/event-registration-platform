@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import toast from "react-hot-toast";
-import { CalendarDays, Clock, MapPin, Users, Wallet } from "lucide-react";
+import { CalendarDays, Clock, IndianRupee, MapPin, Users, Wallet } from "lucide-react";
 import api from "../../api/axios";
 import Button from "../../components/Button";
 
@@ -74,6 +74,14 @@ const EventDetails = () => {
               </p>
             )}
             <p className="flex items-center gap-2"><Users size={16} /> Capacity: {event.maxCapacity}</p>
+            <p className="flex items-center gap-2 font-medium">
+              <IndianRupee size={16} />
+              {event.registrationFee ? (
+                <span className="text-black">Fee: ₹{event.registrationFee}</span>
+              ) : (
+                <span className="text-green-600">Free</span>
+              )}
+            </p>
           </div>
 
           {/* UPI ID Section */}
@@ -82,6 +90,9 @@ const EventDetails = () => {
               <p className="mb-1 text-xs font-medium uppercase tracking-wide text-gray-500">
                 Pay via UPI
               </p>
+              {event.registrationFee && (
+                <p className="mb-2 text-2xl font-bold text-black">₹{event.registrationFee}</p>
+              )}
               <div className="flex items-center gap-2">
                 <Wallet size={18} className="shrink-0 text-gray-600" />
                 <p className="select-all break-all text-base font-semibold text-black">
