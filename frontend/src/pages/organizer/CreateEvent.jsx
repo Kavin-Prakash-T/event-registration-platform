@@ -13,6 +13,7 @@ const CreateEvent = () => {
     startTime: "",
     endTime: "",
     maxCapacity: "",
+    registrationFee: "",
     upiId: "",
   });
 
@@ -24,6 +25,14 @@ const CreateEvent = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Validate start < end time
+    if (form.startTime && form.endTime) {
+      if (new Date(form.startTime) >= new Date(form.endTime)) {
+        toast.error("End time must be after the start time.");
+        return;
+      }
+    }
 
     const formData = new FormData();
 
@@ -47,12 +56,20 @@ const CreateEvent = () => {
         startTime: "",
         endTime: "",
         maxCapacity: "",
+        registrationFee: "",
         upiId: "",
       });
 
       setBanner(null);
     } catch (error) {
-      toast.error(error.response?.data?.message || "Event creation failed");
+      const msg = error.response?.data?.message;
+      if (msg?.toLowerCase().includes("capacity")) {
+        toast.error("Please enter a valid capacity number.");
+      } else if (msg?.toLowerCase().includes("title")) {
+        toast.error("Event title is required.");
+      } else {
+        toast.error("Failed to create event. Please check your details and try again.");
+      }
     }
   };
 
@@ -109,6 +126,16 @@ const CreateEvent = () => {
               required
             />
 
+            <Input
+              label="Registration Fee (₹)"
+              name="registrationFee"
+              type="number"
+              value={form.registrationFee}
+              onChange={handleChange}
+            />
+          </div>
+
+          <div className="grid gap-4 md:grid-cols-2">
             <Input label="UPI ID" name="upiId" value={form.upiId} onChange={handleChange} />
           </div>
 

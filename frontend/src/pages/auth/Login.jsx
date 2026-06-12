@@ -24,8 +24,31 @@ const Login = () => {
     });
   };
 
+  const validateForm = () => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!form.email.trim()) {
+      toast.error("Please enter your email address.");
+      return false;
+    }
+    if (!emailRegex.test(form.email)) {
+      toast.error("Please enter a valid email address.");
+      return false;
+    }
+    if (!form.password) {
+      toast.error("Please enter your password.");
+      return false;
+    }
+    if (form.password.length < 6) {
+      toast.error("Password must be at least 6 characters.");
+      return false;
+    }
+    return true;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!validateForm()) return;
 
     try {
       const res = await api.post("/auth/login", form);
@@ -40,7 +63,14 @@ const Login = () => {
         navigate("/participant/dashboard");
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || "Login failed");
+      const msg = error.response?.data?.message;
+      if (msg === "Invalid credentials" || msg?.toLowerCase().includes("password")) {
+        toast.error("Incorrect email or password. Please try again.");
+      } else if (msg?.toLowerCase().includes("not found") || msg?.toLowerCase().includes("user")) {
+        toast.error("No account found with this email.");
+      } else {
+        toast.error("Login failed. Please try again.");
+      }
     }
   };
 

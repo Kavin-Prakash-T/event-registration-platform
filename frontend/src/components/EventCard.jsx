@@ -1,4 +1,4 @@
-import { CalendarDays, MapPin, Users } from "lucide-react";
+import { CalendarDays, Clock, MapPin, Users } from "lucide-react";
 import { Link } from "react-router-dom";
 import Button from "./Button";
 
@@ -28,8 +28,16 @@ const EventCard = ({ event }) => {
         </p>
 
         <p className="flex items-center gap-2 text-sm text-gray-600">
-          <CalendarDays size={16} /> {new Date(event.startTime).toLocaleString()}
+          <CalendarDays size={16} />
+          <span>Start: {new Date(event.startTime).toLocaleString()}</span>
         </p>
+
+        {event.endTime && (
+          <p className="flex items-center gap-2 text-sm text-gray-600">
+            <Clock size={16} />
+            <span>End: {new Date(event.endTime).toLocaleString()}</span>
+          </p>
+        )}
 
         <p className="flex items-center gap-2 text-sm text-gray-600">
           <Users size={16} /> Capacity: {event.maxCapacity}

@@ -20,8 +20,8 @@ const PaymentVerification = () => {
       await api.patch(`/payments/${paymentId}/approve`);
       toast.success("Payment approved");
       fetchPayments();
-    } catch (error) {
-      toast.error(error.response?.data?.message || "Approval failed");
+    } catch {
+      toast.error("Failed to approve payment. Please try again.");
     }
   };
 
@@ -34,8 +34,8 @@ const PaymentVerification = () => {
       await api.patch(`/payments/${paymentId}/reject`, { reason });
       toast.success("Payment rejected");
       fetchPayments();
-    } catch (error) {
-      toast.error(error.response?.data?.message || "Reject failed");
+    } catch {
+      toast.error("Failed to reject payment. Please try again.");
     }
   };
 
@@ -48,22 +48,22 @@ const PaymentVerification = () => {
         Approve or reject submitted UPI payments
       </p>
 
-      <div className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
-        <table className="w-full text-left text-sm">
+      <div className="overflow-x-auto rounded-xl border border-gray-200 bg-white shadow-sm">
+        <table className="min-w-full text-left text-sm">
           <thead className="border-b bg-gray-50 text-gray-600">
             <tr>
-              <th className="p-4">Participant</th>
-              <th className="p-4">Event</th>
-              <th className="p-4">UTR ID</th>
-              <th className="p-4">Transaction ID</th>
-              <th className="p-4">Amount</th>
-              <th className="p-4">Actions</th>
+              <th className="whitespace-nowrap p-4">Participant</th>
+              <th className="whitespace-nowrap p-4">Event</th>
+              <th className="whitespace-nowrap p-4">UTR ID</th>
+              <th className="whitespace-nowrap p-4">Transaction ID</th>
+              <th className="whitespace-nowrap p-4">Amount</th>
+              <th className="whitespace-nowrap p-4">Actions</th>
             </tr>
           </thead>
 
           <tbody>
             {payments.map((payment) => (
-              <tr key={payment.id} className="border-b">
+              <tr key={payment.id} className="border-b last:border-0 hover:bg-gray-50">
                 <td className="p-4">
                   <p className="font-medium">
                     {payment.registration.participant.name}
@@ -72,10 +72,10 @@ const PaymentVerification = () => {
                     {payment.registration.participant.email}
                   </p>
                 </td>
-                <td className="p-4">{payment.registration.event.title}</td>
-                <td className="p-4">{payment.utrId}</td>
-                <td className="p-4">{payment.transactionId}</td>
-                <td className="p-4">₹{payment.amount}</td>
+                <td className="whitespace-nowrap p-4">{payment.registration.event.title}</td>
+                <td className="whitespace-nowrap p-4">{payment.utrId}</td>
+                <td className="whitespace-nowrap p-4">{payment.transactionId}</td>
+                <td className="whitespace-nowrap p-4">₹{payment.amount}</td>
                 <td className="p-4">
                   <div className="flex gap-2">
                     <Button onClick={() => approvePayment(payment.id)}>

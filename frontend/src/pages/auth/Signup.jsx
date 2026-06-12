@@ -24,15 +24,53 @@ const Signup = () => {
     });
   };
 
+  const [confirmPassword, setConfirmPassword] = useState("");
+
+  const validateForm = () => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!form.name.trim()) {
+      toast.error("Please enter your name.");
+      return false;
+    }
+    if (!form.email.trim()) {
+      toast.error("Please enter your email address.");
+      return false;
+    }
+    if (!emailRegex.test(form.email)) {
+      toast.error("Please enter a valid email address.");
+      return false;
+    }
+    if (!form.password) {
+      toast.error("Please enter a password.");
+      return false;
+    }
+    if (form.password.length < 6) {
+      toast.error("Password must be at least 6 characters.");
+      return false;
+    }
+    if (form.password !== confirmPassword) {
+      toast.error("Passwords do not match.");
+      return false;
+    }
+    return true;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (!validateForm()) return;
+
     try {
       await api.post("/auth/signup", form);
-      toast.success("OTP sent to email");
+      toast.success("OTP sent to your email. Please verify.");
       navigate("/verify-email", { state: { email: form.email } });
     } catch (error) {
-      toast.error(error.response?.data?.message || "Signup failed");
+      const msg = error.response?.data?.message;
+      if (msg?.toLowerCase().includes("email") && msg?.toLowerCase().includes("exist")) {
+        toast.error("An account with this email already exists.");
+      } else {
+        toast.error("Sign up failed. Please try again.");
+      }
     }
   };
 
@@ -67,6 +105,15 @@ const Signup = () => {
             type="password"
             value={form.password}
             onChange={handleChange}
+            required
+          />
+
+          <Input
+            label="Confirm Password"
+            name="confirmPassword"
+            type="password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
             required
           />
 

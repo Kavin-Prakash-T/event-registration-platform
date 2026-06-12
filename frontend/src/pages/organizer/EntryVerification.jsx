@@ -43,9 +43,9 @@ const EntryVerification = () => {
   const sendOtp = async (registrationId) => {
     try {
       await api.post(`/entry/${registrationId}/send-otp`);
-      toast.success("Entry OTP sent");
-    } catch (error) {
-      toast.error(error.response?.data?.message || "Failed to send OTP");
+      toast.success("Entry OTP sent to participant's email");
+    } catch {
+      toast.error("Failed to send OTP. Please try again.");
     }
   };
 
@@ -54,13 +54,12 @@ const EntryVerification = () => {
 
     try {
       await api.post(`/entry/${selectedRegistration.id}/verify`, { otp });
-
       toast.success("Entry verified successfully");
       setSelectedRegistration(null);
       setOtp("");
       fetchRegistrations();
-    } catch (error) {
-      toast.error(error.response?.data?.message || "Invalid OTP");
+    } catch {
+      toast.error("Invalid or expired OTP. Please try again.");
     }
   };
 
@@ -96,30 +95,30 @@ const EntryVerification = () => {
         />
       </div>
 
-      <div className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
-        <table className="w-full text-left text-sm">
+      <div className="overflow-x-auto rounded-xl border border-gray-200 bg-white shadow-sm">
+        <table className="min-w-full text-left text-sm">
           <thead className="border-b bg-gray-50 text-gray-600">
             <tr>
-              <th className="p-4">Participant</th>
-              <th className="p-4">Payment</th>
-              <th className="p-4">Entry</th>
-              <th className="p-4">Actions</th>
+              <th className="whitespace-nowrap p-4">Participant</th>
+              <th className="whitespace-nowrap p-4">Payment</th>
+              <th className="whitespace-nowrap p-4">Entry</th>
+              <th className="whitespace-nowrap p-4">Actions</th>
             </tr>
           </thead>
 
           <tbody>
             {registrations.map((reg) => (
-              <tr key={reg.id} className="border-b">
+              <tr key={reg.id} className="border-b last:border-0 hover:bg-gray-50">
                 <td className="p-4">
-                  <p className="font-medium text-black">{reg.participant.name}</p>
+                  <p className="whitespace-nowrap font-medium text-black">{reg.participant.name}</p>
                   <p className="text-xs text-gray-500">{reg.participant.email}</p>
                 </td>
 
-                <td className="p-4">
+                <td className="whitespace-nowrap p-4">
                   {reg.payment ? <Badge status={reg.payment.status} /> : "No payment"}
                 </td>
 
-                <td className="p-4">
+                <td className="whitespace-nowrap p-4">
                   <Badge status={reg.entryStatus} />
                 </td>
 
@@ -148,8 +147,8 @@ const EntryVerification = () => {
       </div>
 
       {selectedRegistration && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black/40 px-4">
-          <div className="w-full max-w-md rounded-xl bg-white p-6 shadow-sm">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
+          <div className="w-full max-w-md overflow-y-auto rounded-xl bg-white p-6 shadow-xl" style={{ maxHeight: "90vh" }}>
             <h2 className="text-xl font-semibold text-black">Verify Entry OTP</h2>
             <p className="mb-5 text-sm text-gray-500">
               {selectedRegistration.participant.name}
@@ -168,7 +167,7 @@ const EntryVerification = () => {
                 <Button
                   type="button"
                   variant="secondary"
-                  onClick={() => setSelectedRegistration(null)}
+                  onClick={() => { setSelectedRegistration(null); setOtp(""); }}
                 >
                   Cancel
                 </Button>

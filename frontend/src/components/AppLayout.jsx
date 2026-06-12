@@ -6,7 +6,7 @@ const AppLayout = ({ children }) => {
     <div className="min-h-screen bg-gray-50">
       <Sidebar />
 
-      <main className="ml-64 min-h-screen">
+      <main className="min-h-screen pt-14 md:ml-64 md:pt-0">
         {children}
       </main>
 

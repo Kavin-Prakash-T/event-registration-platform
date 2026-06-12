@@ -46,23 +46,23 @@ const EventRegistrations = () => {
         />
       </div>
 
-      <div className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
-        <table className="w-full text-left text-sm">
+      <div className="overflow-x-auto rounded-xl border border-gray-200 bg-white shadow-sm">
+        <table className="min-w-full text-left text-sm">
           <thead className="border-b bg-gray-50 text-gray-600">
             <tr>
-              <th className="p-4">Participant</th>
-              <th className="p-4">Email</th>
-              <th className="p-4">Registration</th>
-              <th className="p-4">Payment</th>
-              <th className="p-4">Entry</th>
+              <th className="whitespace-nowrap p-4">Participant</th>
+              <th className="whitespace-nowrap p-4">Email</th>
+              <th className="whitespace-nowrap p-4">Registration</th>
+              <th className="whitespace-nowrap p-4">Payment</th>
+              <th className="whitespace-nowrap p-4">Entry</th>
             </tr>
           </thead>
 
           <tbody>
             {registrations.map((reg) => (
-              <tr key={reg.id} className="border-b">
-                <td className="p-4 font-medium">{reg.participant.name}</td>
-                <td className="p-4 text-gray-600">{reg.participant.email}</td>
+              <tr key={reg.id} className="border-b last:border-0 hover:bg-gray-50">
+                <td className="whitespace-nowrap p-4 font-medium">{reg.participant.name}</td>
+                <td className="whitespace-nowrap p-4 text-gray-600">{reg.participant.email}</td>
                 <td className="p-4">
                   <Badge status={reg.registrationStatus} />
                 </td>

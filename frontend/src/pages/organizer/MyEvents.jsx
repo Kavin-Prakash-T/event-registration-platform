@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { CalendarDays, MapPin, Users } from "lucide-react";
+import { CalendarDays, Clock, MapPin, Users } from "lucide-react";
 import toast from "react-hot-toast";
 
 import api from "../../api/axios";
@@ -31,8 +31,8 @@ const MyEvents = () => {
       await api.delete(`/events/${id}`);
       toast.success("Event deleted");
       fetchEvents();
-    } catch (error) {
-      toast.error(error.response?.data?.message || "Delete failed");
+    } catch {
+      toast.error("Failed to delete the event. Please try again.");
     }
   };
 
@@ -95,8 +95,15 @@ const MyEvents = () => {
 
                   <p className="flex items-center gap-2 text-sm text-gray-600">
                     <CalendarDays size={16} />
-                    {new Date(event.startTime).toLocaleString()}
+                    <span>Start: {new Date(event.startTime).toLocaleString()}</span>
                   </p>
+
+                  {event.endTime && (
+                    <p className="flex items-center gap-2 text-sm text-gray-600">
+                      <Clock size={16} />
+                      <span>End: {new Date(event.endTime).toLocaleString()}</span>
+                    </p>
+                  )}
 
                   <p className="flex items-center gap-2 text-sm text-gray-600">
                     <Users size={16} /> Capacity: {event.maxCapacity}

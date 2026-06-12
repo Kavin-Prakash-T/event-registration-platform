@@ -17,6 +17,7 @@ const EditEvent = () => {
     startTime: "",
     endTime: "",
     maxCapacity: "",
+    registrationFee: "",
     upiId: "",
   });
 
@@ -35,6 +36,7 @@ const EditEvent = () => {
         startTime: event.startTime?.slice(0, 16) || "",
         endTime: event.endTime?.slice(0, 16) || "",
         maxCapacity: event.maxCapacity || "",
+        registrationFee: event.registrationFee || "",
         upiId: event.upiId || "",
       });
     };
@@ -52,6 +54,14 @@ const EditEvent = () => {
   const updateEvent = async (e) => {
     e.preventDefault();
 
+    // Validate start < end time
+    if (form.startTime && form.endTime) {
+      if (new Date(form.startTime) >= new Date(form.endTime)) {
+        toast.error("End time must be after the start time.");
+        return;
+      }
+    }
+
     const formData = new FormData();
 
     Object.keys(form).forEach((key) => {
@@ -67,7 +77,14 @@ const EditEvent = () => {
       toast.success("Event updated successfully");
       navigate("/organizer/my-events");
     } catch (error) {
-      toast.error(error.response?.data?.message || "Update failed");
+      const msg = error.response?.data?.message;
+      if (msg?.toLowerCase().includes("capacity")) {
+        toast.error("Please enter a valid capacity number.");
+      } else if (msg?.toLowerCase().includes("title")) {
+        toast.error("Event title is required.");
+      } else {
+        toast.error("Failed to update event. Please check your details and try again.");
+      }
     }
   };
 
@@ -146,6 +163,16 @@ const EditEvent = () => {
               required
             />
 
+            <Input
+              label="Registration Fee (₹)"
+              name="registrationFee"
+              type="number"
+              value={form.registrationFee}
+              onChange={handleChange}
+            />
+          </div>
+
+          <div className="grid gap-4 md:grid-cols-2">
             <Input
               label="UPI ID"
               name="upiId"
