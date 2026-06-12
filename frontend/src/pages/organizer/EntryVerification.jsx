@@ -12,6 +12,8 @@ const EntryVerification = () => {
   const [search, setSearch] = useState("");
   const [selectedRegistration, setSelectedRegistration] = useState(null);
   const [otp, setOtp] = useState("");
+  const [sendingOtpId, setSendingOtpId] = useState(null);
+  const [verifying, setVerifying] = useState(false);
 
   const fetchEvents = async () => {
     const res = await api.get("/events/my-events");
@@ -42,16 +44,20 @@ const EntryVerification = () => {
 
   const sendOtp = async (registrationId) => {
     try {
+      setSendingOtpId(registrationId);
       await api.post(`/entry/${registrationId}/send-otp`);
       toast.success("Entry OTP sent to participant's email");
     } catch {
       toast.error("Failed to send OTP. Please try again.");
+    } finally {
+      setSendingOtpId(null);
     }
   };
 
   const verifyOtp = async (e) => {
     e.preventDefault();
 
+    setVerifying(true);
     try {
       await api.post(`/entry/${selectedRegistration.id}/verify`, { otp });
       toast.success("Entry verified successfully");
@@ -60,6 +66,8 @@ const EntryVerification = () => {
       fetchRegistrations();
     } catch {
       toast.error("Invalid or expired OTP. Please try again.");
+    } finally {
+      setVerifying(false);
     }
   };
 
@@ -124,11 +132,11 @@ const EntryVerification = () => {
 
                 <td className="p-4">
                   <div className="flex gap-2">
-                    <Button onClick={() => sendOtp(reg.id)}>Send OTP</Button>
+                    <Button onClick={() => sendOtp(reg.id)} loading={sendingOtpId === reg.id}>Send OTP</Button>
                     <Button
                       variant="secondary"
                       onClick={() => setSelectedRegistration(reg)}
-                      disabled={reg.entryStatus === "ALLOWED"}
+                      disabled={reg.entryStatus === "ALLOWED" || sendingOtpId === reg.id}
                     >
                       Verify OTP
                     </Button>
@@ -163,11 +171,12 @@ const EntryVerification = () => {
               />
 
               <div className="flex gap-3">
-                <Button type="submit">Verify</Button>
+                <Button type="submit" loading={verifying}>Verify</Button>
                 <Button
                   type="button"
                   variant="secondary"
                   onClick={() => { setSelectedRegistration(null); setOtp(""); }}
+                  disabled={verifying}
                 >
                   Cancel
                 </Button>

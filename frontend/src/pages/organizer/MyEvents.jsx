@@ -10,6 +10,7 @@ const CLOUD_NAME = import.meta.env.VITE_CLOUDINARY_NAME;
 
 const MyEvents = () => {
   const [events, setEvents] = useState([]);
+  const [deletingId, setDeletingId] = useState(null);
 
   const fetchEvents = async () => {
     try {
@@ -28,11 +29,14 @@ const MyEvents = () => {
     try {
       if (!window.confirm("Delete this event?")) return;
 
+      setDeletingId(id);
       await api.delete(`/events/${id}`);
       toast.success("Event deleted");
       fetchEvents();
     } catch {
       toast.error("Failed to delete the event. Please try again.");
+    } finally {
+      setDeletingId(null);
     }
   };
 
@@ -130,6 +134,7 @@ const MyEvents = () => {
                     <Button
                       variant="danger"
                       onClick={() => deleteEvent(event.id)}
+                      loading={deletingId === event.id}
                     >
                       Delete
                     </Button>

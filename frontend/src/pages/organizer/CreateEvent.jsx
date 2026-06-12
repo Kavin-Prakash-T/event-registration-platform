@@ -18,6 +18,7 @@ const CreateEvent = () => {
   });
 
   const [banner, setBanner] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -44,6 +45,7 @@ const CreateEvent = () => {
       formData.append("banner", banner);
     }
 
+    setLoading(true);
     try {
       await api.post("/events", formData);
       toast.success("Event created successfully");
@@ -70,6 +72,8 @@ const CreateEvent = () => {
       } else {
         toast.error("Failed to create event. Please check your details and try again.");
       }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -149,7 +153,7 @@ const CreateEvent = () => {
             />
           </div>
 
-          <Button>Create Event</Button>
+          <Button loading={loading}>Create Event</Button>
         </form>
       </div>
     </div>

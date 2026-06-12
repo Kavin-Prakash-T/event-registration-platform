@@ -11,14 +11,16 @@ const FloatingChatbot = () => {
       text: "Hi! Ask me about events, registration, payment, or entry OTP.",
     },
   ]);
+  const [loading, setLoading] = useState(false);
 
   const sendMessage = async (e) => {
     e.preventDefault();
 
-    if (!input.trim()) return;
+    if (!input.trim() || loading) return;
 
     const userText = input;
     setInput("");
+    setLoading(true);
 
     setMessages((prev) => [...prev, { role: "user", text: userText }]);
 
@@ -36,6 +38,8 @@ const FloatingChatbot = () => {
         ...prev,
         { role: "bot", text: "Sorry, I cannot answer now." },
       ]);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -73,14 +77,22 @@ const FloatingChatbot = () => {
 
           <form onSubmit={sendMessage} className="flex gap-2 border-t p-3">
             <input
-              className="flex-1 rounded-lg border border-gray-300 px-3 py-2 text-sm outline-none focus:border-black"
+              className="flex-1 rounded-lg border border-gray-300 px-3 py-2 text-sm outline-none focus:border-black disabled:opacity-50"
               placeholder="Ask..."
               value={input}
               onChange={(e) => setInput(e.target.value)}
+              disabled={loading}
             />
 
-            <button className="rounded-lg bg-black px-3 text-white">
-              <Send size={16} />
+            <button
+              className="rounded-lg bg-black px-3 text-white disabled:opacity-50 flex items-center justify-center"
+              disabled={loading}
+            >
+              {loading ? (
+                <span className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+              ) : (
+                <Send size={16} />
+              )}
             </button>
           </form>
         </div>

@@ -9,16 +9,20 @@ import Input from "../../components/Input";
 const ForgotPassword = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    setLoading(true);
     try {
       await api.post("/auth/forgot-password", { email });
       toast.success("OTP sent to email");
       navigate("/reset-password", { state: { email } });
     } catch (error) {
       toast.error(error.response?.data?.message || "Failed to send OTP");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -37,7 +41,7 @@ const ForgotPassword = () => {
             required
           />
 
-          <Button className="w-full">Send OTP</Button>
+          <Button className="w-full" loading={loading}>Send OTP</Button>
         </form>
       </div>
     </div>

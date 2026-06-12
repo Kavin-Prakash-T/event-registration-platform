@@ -22,6 +22,7 @@ const EditEvent = () => {
   });
 
   const [banner, setBanner] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchEvent = async () => {
@@ -72,6 +73,7 @@ const EditEvent = () => {
       formData.append("banner", banner);
     }
 
+    setLoading(true);
     try {
       await api.put(`/events/${id}`, formData);
       toast.success("Event updated successfully");
@@ -85,6 +87,8 @@ const EditEvent = () => {
       } else {
         toast.error("Failed to update event. Please check your details and try again.");
       }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -194,7 +198,7 @@ const EditEvent = () => {
           </div>
 
           <div className="flex gap-3">
-            <Button type="submit">Update Event</Button>
+            <Button type="submit" loading={loading}>Update Event</Button>
             <Button
               type="button"
               variant="secondary"

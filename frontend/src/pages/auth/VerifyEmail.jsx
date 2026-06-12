@@ -15,6 +15,7 @@ const VerifyEmail = () => {
     email: location.state?.email || "",
     otp: "",
   });
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     setForm({
@@ -26,12 +27,15 @@ const VerifyEmail = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    setLoading(true);
     try {
       await api.post("/auth/verify-email", form);
       toast.success("Email verified");
       navigate("/login");
     } catch (error) {
       toast.error(error.response?.data?.message || "OTP verification failed");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -52,7 +56,7 @@ const VerifyEmail = () => {
           <Input label="Email" name="email" value={form.email} onChange={handleChange} required />
           <Input label="OTP" name="otp" value={form.otp} onChange={handleChange} required />
 
-          <Button className="w-full">Verify</Button>
+          <Button className="w-full" loading={loading}>Verify</Button>
         </form>
       </div>
     </div>

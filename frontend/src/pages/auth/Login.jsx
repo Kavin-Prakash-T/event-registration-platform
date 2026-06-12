@@ -16,6 +16,7 @@ const Login = () => {
     email: "",
     password: "",
   });
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     setForm({
@@ -50,6 +51,7 @@ const Login = () => {
 
     if (!validateForm()) return;
 
+    setLoading(true);
     try {
       const res = await api.post("/auth/login", form);
 
@@ -71,6 +73,8 @@ const Login = () => {
       } else {
         toast.error("Login failed. Please try again.");
       }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -106,7 +110,7 @@ const Login = () => {
             required
           />
 
-          <Button className="w-full">Login</Button>
+          <Button className="w-full" loading={loading}>Login</Button>
         </form>
 
         <div className="mt-5 flex justify-between text-sm">

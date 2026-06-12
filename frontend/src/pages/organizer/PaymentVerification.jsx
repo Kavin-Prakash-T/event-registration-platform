@@ -5,6 +5,7 @@ import Button from "../../components/Button";
 
 const PaymentVerification = () => {
   const [payments, setPayments] = useState([]);
+  const [processingId, setProcessingId] = useState(null);
 
   const fetchPayments = async () => {
     const res = await api.get("/payments/pending");
@@ -17,11 +18,14 @@ const PaymentVerification = () => {
 
   const approvePayment = async (paymentId) => {
     try {
+      setProcessingId(paymentId);
       await api.patch(`/payments/${paymentId}/approve`);
       toast.success("Payment approved");
       fetchPayments();
     } catch {
       toast.error("Failed to approve payment. Please try again.");
+    } finally {
+      setProcessingId(null);
     }
   };
 
@@ -31,11 +35,14 @@ const PaymentVerification = () => {
     if (!reason) return;
 
     try {
+      setProcessingId(paymentId);
       await api.patch(`/payments/${paymentId}/reject`, { reason });
       toast.success("Payment rejected");
       fetchPayments();
     } catch {
       toast.error("Failed to reject payment. Please try again.");
+    } finally {
+      setProcessingId(null);
     }
   };
 
@@ -78,12 +85,16 @@ const PaymentVerification = () => {
                 <td className="whitespace-nowrap p-4">₹{payment.amount}</td>
                 <td className="p-4">
                   <div className="flex gap-2">
-                    <Button onClick={() => approvePayment(payment.id)}>
+                    <Button
+                      onClick={() => approvePayment(payment.id)}
+                      loading={processingId === payment.id}
+                    >
                       Approve
                     </Button>
                     <Button
                       variant="danger"
                       onClick={() => rejectPayment(payment.id)}
+                      disabled={processingId === payment.id}
                     >
                       Reject
                     </Button>

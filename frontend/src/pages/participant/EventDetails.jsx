@@ -11,6 +11,7 @@ const EventDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [event, setEvent] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchEvent = async () => {
@@ -23,6 +24,7 @@ const EventDetails = () => {
 
   const registerEvent = async () => {
     try {
+      setLoading(true);
       await api.post(`/registrations/${id}/register`);
       toast.success("Registered successfully");
       navigate("/participant/registrations");
@@ -35,6 +37,8 @@ const EventDetails = () => {
       } else {
         toast.error("Registration failed. Please try again.");
       }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -103,7 +107,7 @@ const EventDetails = () => {
             </div>
           )}
 
-          <Button onClick={registerEvent}>Register Event</Button>
+          <Button onClick={registerEvent} loading={loading}>Register Event</Button>
         </div>
       </div>
     </div>

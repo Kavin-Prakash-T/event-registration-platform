@@ -13,6 +13,7 @@ const MyRegistrations = () => {
     transactionId: "",
     amount: "",
   });
+  const [submitting, setSubmitting] = useState(false);
 
   const fetchRegistrations = async () => {
     const res = await api.get("/registrations/my-registrations");
@@ -50,6 +51,7 @@ const MyRegistrations = () => {
     }
 
     try {
+      setSubmitting(true);
       await api.post(`/payments/${selected.id}/submit`, payment);
       toast.success("Payment submitted successfully");
       setSelected(null);
@@ -64,6 +66,8 @@ const MyRegistrations = () => {
       } else {
         toast.error("Failed to submit payment. Please try again.");
       }
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -199,7 +203,7 @@ const MyRegistrations = () => {
               </div>
 
               <div className="flex gap-3 pt-1">
-                <Button type="submit">Submit</Button>
+                <Button type="submit" loading={submitting}>Submit</Button>
                 <Button
                   type="button"
                   variant="secondary"
@@ -207,6 +211,7 @@ const MyRegistrations = () => {
                     setSelected(null);
                     setPayment({ utrId: "", transactionId: "", amount: "" });
                   }}
+                  disabled={submitting}
                 >
                   Cancel
                 </Button>

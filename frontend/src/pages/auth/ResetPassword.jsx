@@ -15,6 +15,7 @@ const ResetPassword = () => {
     otp: "",
     newPassword: "",
   });
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     setForm({
@@ -26,6 +27,7 @@ const ResetPassword = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    setLoading(true);
     try {
       await api.post("/auth/verify-forgot-otp", {
         email: form.email,
@@ -41,6 +43,8 @@ const ResetPassword = () => {
       navigate("/login");
     } catch (error) {
       toast.error(error.response?.data?.message || "Password reset failed");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -62,7 +66,7 @@ const ResetPassword = () => {
             required
           />
 
-          <Button className="w-full">Reset Password</Button>
+          <Button className="w-full" loading={loading}>Reset Password</Button>
         </form>
       </div>
     </div>

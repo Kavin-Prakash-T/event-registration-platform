@@ -25,6 +25,7 @@ const Signup = () => {
   };
 
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const validateForm = () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -60,6 +61,7 @@ const Signup = () => {
 
     if (!validateForm()) return;
 
+    setLoading(true);
     try {
       await api.post("/auth/signup", form);
       toast.success("OTP sent to your email. Please verify.");
@@ -71,6 +73,8 @@ const Signup = () => {
       } else {
         toast.error("Sign up failed. Please try again.");
       }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -130,7 +134,7 @@ const Signup = () => {
             </select>
           </div>
 
-          <Button className="w-full">Create Account</Button>
+          <Button className="w-full" loading={loading}>Create Account</Button>
         </form>
 
         <p className="mt-5 text-center text-sm text-gray-600">
