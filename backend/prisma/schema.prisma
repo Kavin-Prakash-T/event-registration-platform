@@ -64,6 +64,7 @@ model Event {
   startTime       DateTime
   endTime         DateTime
   maxCapacity     Int
+  registrationFee Float?
   bannerPublicId  String?
   upiId           String?
   status          EventStatus @default(UPCOMING)

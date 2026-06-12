@@ -3,6 +3,7 @@ const prisma = require("../config/prisma");
 const submitPaymentService = async (registrationId, participantId, data) => {
   const registration = await prisma.registration.findUnique({
     where: { id: Number(registrationId) },
+    include: { event: true },
   });
 
   if (!registration) {
@@ -15,6 +16,16 @@ const submitPaymentService = async (registrationId, participantId, data) => {
 
   if (registration.registrationStatus !== "PAYMENT_PENDING") {
     throw new Error("Payment cannot be submitted for this registration");
+  }
+
+  if (
+    registration.event.registrationFee !== null &&
+    registration.event.registrationFee !== undefined &&
+    Number(data.amount) !== registration.event.registrationFee
+  ) {
+    throw new Error(
+      `Incorrect amount. The registration fee for this event is ₹${registration.event.registrationFee}`
+    );
   }
 
   const existingPayment = await prisma.manualPayment.findUnique({

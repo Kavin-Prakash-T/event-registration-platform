@@ -11,6 +11,7 @@ const createEventService = async (data, organizerId, file) => {
       startTime: new Date(data.startTime),
       endTime: new Date(data.endTime),
       maxCapacity: Number(data.maxCapacity),
+      registrationFee: data.registrationFee ? Number(data.registrationFee) : null,
       upiId: data.upiId,
       bannerPublicId: file ? file.filename : null,
       organizerId,
@@ -118,9 +119,10 @@ const updateEventService = async (id, data, organizerId, file) => {
       category: data.category ?? event.category,
       startTime: data.startTime ? new Date(data.startTime) : event.startTime,
       endTime: data.endTime ? new Date(data.endTime) : event.endTime,
-      maxCapacity: data.maxCapacity
-        ? Number(data.maxCapacity)
-        : event.maxCapacity,
+      maxCapacity: data.maxCapacity ? Number(data.maxCapacity) : event.maxCapacity,
+      registrationFee: data.registrationFee !== undefined
+        ? (data.registrationFee ? Number(data.registrationFee) : null)
+        : event.registrationFee,
       upiId: data.upiId ?? event.upiId,
       bannerPublicId,
     },
