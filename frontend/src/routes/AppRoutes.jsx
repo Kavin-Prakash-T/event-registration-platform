@@ -5,46 +5,41 @@ import Signup from "../pages/auth/Signup";
 import VerifyEmail from "../pages/auth/VerifyEmail";
 import ForgotPassword from "../pages/auth/ForgotPassword";
 import ResetPassword from "../pages/auth/ResetPassword";
+
 import ParticipantDashboard from "../pages/participant/ParticipantDashboard";
 import Events from "../pages/participant/Events";
 import EventDetails from "../pages/participant/EventDetails";
 import MyRegistrations from "../pages/participant/MyRegistrations";
 
+import OrganizerDashboard from "../pages/organizer/OrganizerDashboard";
+import CreateEvent from "../pages/organizer/CreateEvent";
+import MyEvents from "../pages/organizer/MyEvents";
+import EventRegistrations from "../pages/organizer/EventRegistrations";
+import PaymentVerification from "../pages/organizer/PaymentVerification";
+import EntryVerification from "../pages/organizer/EntryVerification";
+import EditEvent from "../pages/organizer/EditEvent";
+
 import ProtectedRoute from "../components/ProtectedRoute";
+
+import AppLayout from "../components/AppLayout";
 
 const AppRoutes = () => {
   return (
     <Routes>
-      <Route path="/" element={<Navigate to="/login" />} />
+      <Route path="/" element={<Navigate to="/login" replace />} />
 
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
       <Route path="/verify-email" element={<VerifyEmail />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route path="/reset-password" element={<ResetPassword />} />
-
-      <Route
-        path="/organizer/dashboard"
-        element={
-          <ProtectedRoute role="ORGANIZER">
-            <h1 className="p-6 text-2xl font-semibold">Organizer Dashboard</h1>
-          </ProtectedRoute>
-        }
-      />
-
       <Route
         path="/participant/dashboard"
         element={
           <ProtectedRoute role="PARTICIPANT">
-            <h1 className="p-6 text-2xl font-semibold">Participant Dashboard</h1>
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/participant/dashboard"
-        element={
-          <ProtectedRoute role="PARTICIPANT">
-            <ParticipantDashboard />
+            <AppLayout>
+              <ParticipantDashboard />
+            </AppLayout>
           </ProtectedRoute>
         }
       />
@@ -53,7 +48,9 @@ const AppRoutes = () => {
         path="/participant/events"
         element={
           <ProtectedRoute role="PARTICIPANT">
-            <Events />
+            <AppLayout>
+              <Events />
+            </AppLayout>
           </ProtectedRoute>
         }
       />
@@ -62,7 +59,9 @@ const AppRoutes = () => {
         path="/participant/events/:id"
         element={
           <ProtectedRoute role="PARTICIPANT">
-            <EventDetails />
+            <AppLayout>
+              <EventDetails />
+            </AppLayout>
           </ProtectedRoute>
         }
       />
@@ -71,7 +70,86 @@ const AppRoutes = () => {
         path="/participant/registrations"
         element={
           <ProtectedRoute role="PARTICIPANT">
-            <MyRegistrations />
+            <AppLayout>
+              <MyRegistrations />
+            </AppLayout>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/organizer/dashboard"
+        element={
+          <ProtectedRoute role="ORGANIZER">
+            <AppLayout>
+              <OrganizerDashboard />
+            </AppLayout>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/organizer/create-event"
+        element={
+          <ProtectedRoute role="ORGANIZER">
+            <AppLayout>
+              <CreateEvent />
+            </AppLayout>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/organizer/my-events"
+        element={
+          <ProtectedRoute role="ORGANIZER">
+            <AppLayout>
+              <MyEvents />
+            </AppLayout>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/organizer/events/:id/registrations"
+        element={
+          <ProtectedRoute role="ORGANIZER">
+            <AppLayout>
+              <EventRegistrations />
+            </AppLayout>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/organizer/payments"
+        element={
+          <ProtectedRoute role="ORGANIZER">
+            <AppLayout>
+              <PaymentVerification />
+            </AppLayout>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/organizer/entry"
+        element={
+          <ProtectedRoute role="ORGANIZER">
+            <AppLayout>
+              <EntryVerification />
+            </AppLayout>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/organizer/events/:id/edit"
+        element={
+          <ProtectedRoute role="ORGANIZER">
+            <AppLayout>
+              <EditEvent />
+            </AppLayout>
           </ProtectedRoute>
         }
       />
