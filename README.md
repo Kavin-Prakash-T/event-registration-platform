@@ -1,248 +1,435 @@
-# event-registration-platform
+# Event Registration Platform
 
-# OTP-Based Event Registration and Entry Verification System
-
-## Overview
-
-The OTP-Based Event Registration and Entry Verification System is a full-stack web application that allows organizers to create and manage events while enabling participants to register, verify payments, and gain entry through OTP-based verification.
-
-The platform focuses on secure event management, manual UPI payment verification, participant validation, and automated event entry control.
+A full-stack Event Registration Platform built with React, Node.js, Express, Prisma, and PostgreSQL. The platform allows organizers to create and manage events while participants can discover events, register, submit payments, and verify entry using OTP-based authentication.
 
 ---
 
-## Features
+# Features
 
-### Participant Features
+## Authentication & Authorization
 
 * User Registration
 * Email Verification using OTP
-* Login & Authentication
-* Forgot Password using OTP
+* Secure Login with JWT
+* Forgot Password with OTP
+* Reset Password
+* Role-Based Access Control
+* Organizer Role
+* Participant Role
+
+---
+
+## Event Management
+
+### Organizer Features
+
+* Create Event
+* Update Event
+* Delete Event
+* Upload Event Banner using Cloudinary
+* Manage Event Capacity
+* Manage Event Details
+* View Event Registrations
+
+### Participant Features
+
 * Browse Events
 * Search Events
 * View Event Details
 * Register for Events
-* Submit UPI Transaction ID & UTR ID
-* View Registration Status
-* Receive Event Entry OTP
-* View Registered Events
-
-### Organizer Features
-
-* Organizer Registration
-* Email Verification using OTP
-* Login & Authentication
-* Forgot Password using OTP
-* Create Events
-* Update Events
-* Delete Events
-* Upload Event Banner
-* Manage Event Capacity
-* View Registrations
-* Verify UPI Payments
-* Approve / Reject Registrations
-* Send Event Entry OTP Automatically
-* Send Event Entry OTP Manually
-* Verify Participant Entry OTP
-* View Event Statistics
 
 ---
 
-## Event Registration Flow
+## Registration System
 
-1. Participant creates an account.
-2. Email verification OTP is sent.
-3. Participant verifies email.
-4. Participant browses available events.
-5. Participant registers for an event.
-6. Participant makes payment using organizer's UPI QR.
-7. Participant submits:
+* Event Registration
+* Duplicate Registration Prevention
+* Capacity Validation
+* Registration Status Tracking
 
-   * Transaction ID
-   * UTR ID
-8. Registration status becomes **Pending Verification**.
-9. Organizer verifies payment.
-10. Registration becomes **Confirmed**.
+Registration statuses:
 
----
-
-## Event Entry Flow
-
-1. Event Entry OTP is sent before the event.
-2. Participant arrives at the venue.
-3. Participant provides OTP.
-4. Organizer verifies OTP.
-5. Entry status becomes **Allowed**.
-
----
-
-## OTP Workflows
-
-### Email Verification OTP
-
-Used during account creation.
-
-### Forgot Password OTP
-
-Used to reset forgotten passwords.
-
-### Event Entry OTP
-
-Used as a digital event pass for entry verification.
-
----
-
-## Event Capacity Management
-
-Organizers can define the maximum participant capacity while creating an event.
-
-Examples:
-
-- Workshop: 30 Participants
-- Hackathon: 100 Participants
-- Seminar: 500 Participants
-
-The system automatically tracks available seats and prevents new registrations once the event capacity is reached.
-
-Registrations can be reopened if seats become available due to cancellation or rejection.
+* PAYMENT_PENDING
+* PAYMENT_SUBMITTED
+* CONFIRMED
+* REJECTED
+* CANCELLED
 
 ---
 
 ## Payment Verification
 
-The system uses manual UPI payment verification.
+Participants can submit:
 
-Participants submit:
-
-* Transaction ID
 * UTR ID
+* Transaction ID
+* Payment Amount
 
-Organizers verify payments manually and approve or reject registrations.
+Organizers can:
 
----
+* Approve Payment
+* Reject Payment
+* Add Rejection Reason
 
-## Tech Stack
-
-### Frontend
-
-* React.js
-* Tailwind CSS
-* React Router DOM
-* Axios
-* React Hot Toast
-* Lucide React
-
-### Backend
-
-* Node.js
-* Express.js
-
-### Database
-
-* PostgreSQL
-* Neon Database
-
-### ORM
-
-* Prisma ORM
-
-### Authentication
-
-* JWT Authentication
-* Email OTP Verification
-
-### File Storage
-
-* Cloudinary
-* Event Banner Upload
-
-### Email Service
-
-* Nodemailer
-
-### Scheduled Tasks
-
-* Node Cron
-
-### Deployment
-
-**Frontend**
-
-* Vercel
-
-**Backend**
-
-* Render
-
-**Database**
-
-* Neon PostgreSQL
+Payment verification is manually reviewed by organizers.
 
 ---
 
-## Backend Structure
+## OTP-Based Entry Verification
 
-```text
-backend/
-├── prisma/
-│   └── schema.prisma
-├── src/
-│   ├── config/
-│   ├── controllers/
-│   ├── routes/
-│   ├── middleware/
-│   ├── services/
-│   ├── jobs/
-│   ├── utils/
-│   ├── app.js
-│   └── server.js
-└── .env
-```
+Organizers can:
 
-## Frontend Structure
+* Send Entry OTP
+* Verify Entry OTP
 
-```text
-frontend/
-├── src/
-│   ├── api/
-│   ├── components/
-│   ├── pages/
-│   │   ├── auth/
-│   │   ├── participant/
-│   │   └── organizer/
-│   ├── context/
-│   ├── layouts/
-│   ├── routes/
-│   ├── App.jsx
-│   └── main.jsx
-```
+Participants receive OTP via email before event entry.
+
+Entry statuses:
+
+* NOT_ARRIVED
+* ALLOWED
+* REJECTED
 
 ---
 
-## Future Enhancements
+## Dashboard System
 
-* AI Student Support Chatbot
-* SMS OTP Integration
-* Attendance Analytics
-* Certificate Generation
-* Event Feedback System
-* Organizer Reports Export
-* Real-Time Notifications
-* Mobile Application
+### Organizer Dashboard
+
+* Total Events
+* Total Registrations
+* Pending Payments
+* Confirmed Registrations
+* Entry Verification Statistics
+
+### Participant Dashboard
+
+* Registered Events
+* Pending Payments
+* Confirmed Events
+* Entry Status
+* Registration Statistics
 
 ---
 
-## Author
+## AI Chatbot
 
-Developed using:
+Integrated FAQ and Help Chatbot for:
+
+### Participants
+
+* Registration Queries
+* Payment Queries
+* Event Queries
+* OTP Queries
+
+### Organizers
+
+* Event Management Queries
+* Payment Verification Queries
+* Registration Queries
+
+Powered by Groq LLM.
+
+---
+
+# Tech Stack
+
+## Frontend
 
 * React
+* React Router DOM
+* Axios
+* Tailwind CSS
+* Lucide React
+* React Hot Toast
+
+## Backend
+
 * Node.js
 * Express.js
-* PostgreSQL
 * Prisma ORM
-* Tailwind CSS
-* Cloudinary
+* PostgreSQL
 * JWT Authentication
+* Nodemailer
+* Cloudinary
+* Multer
 
-A modern full-stack event management solution with secure OTP-based participant verification.
+## Database
+
+* PostgreSQL
+
+## File Storage
+
+* Cloudinary
+
+## AI
+
+* Groq API
+
+---
+
+# Architecture
+
+## Roles
+
+### Organizer
+
+Can:
+
+* Create Events
+* Update Events
+* Delete Events
+* Manage Registrations
+* Verify Payments
+* Verify Entry OTPs
+
+### Participant
+
+Can:
+
+* Browse Events
+* Register for Events
+* Submit Payments
+* Verify Event Entry
+
+---
+
+# Project Structure
+
+## Frontend
+
+```txt
+src
+├── api
+├── components
+├── context
+├── pages
+│   ├── auth
+│   ├── organizer
+│   └── participant
+├── routes
+├── utils
+└── App.jsx
+```
+
+## Backend
+
+```txt
+backend
+├── config
+├── controllers
+├── middleware
+├── routes
+├── services
+├── utils
+├── prisma
+└── server.js
+```
+
+---
+
+# Database Models
+
+## User
+
+* id
+* name
+* email
+* password
+* role
+* isVerified
+
+## Event
+
+* title
+* description
+* venue
+* category
+* startTime
+* endTime
+* maxCapacity
+* bannerPublicId
+* upiId
+
+## Registration
+
+* participantId
+* eventId
+* registrationStatus
+* entryStatus
+
+## ManualPayment
+
+* utrId
+* transactionId
+* amount
+* status
+
+## Otp
+
+* email
+* otp
+* type
+* expiresAt
+
+## EntryLog
+
+* registrationId
+* verifiedById
+* otp
+* status
+
+---
+
+# API Modules
+
+## Authentication
+
+```txt
+POST /api/auth/register
+POST /api/auth/login
+POST /api/auth/verify-email
+POST /api/auth/forgot-password
+POST /api/auth/reset-password
+```
+
+## Events
+
+```txt
+POST /api/events
+GET /api/events
+GET /api/events/:id
+PUT /api/events/:id
+DELETE /api/events/:id
+GET /api/events/my-events
+```
+
+## Registrations
+
+```txt
+POST /api/registrations/:eventId/register
+GET /api/registrations/my-registrations
+GET /api/registrations/event/:eventId/registrations
+```
+
+## Payments
+
+```txt
+POST /api/payments/:registrationId/submit
+PATCH /api/payments/:paymentId/approve
+PATCH /api/payments/:paymentId/reject
+GET /api/payments/pending
+```
+
+## Entry Verification
+
+```txt
+POST /api/entry/:registrationId/send-otp
+POST /api/entry/:registrationId/verify
+```
+
+## Dashboard
+
+```txt
+GET /api/dashboard/participant
+GET /api/dashboard/organizer
+```
+
+## Chatbot
+
+```txt
+POST /api/chatbot/ask
+```
+
+---
+
+# Environment Variables
+
+## Backend
+
+```env
+PORT=3000
+
+DATABASE_URL=
+
+JWT_SECRET=
+JWT_EXPIRES_IN=3d
+
+EMAIL_USER=
+EMAIL_PASS=
+
+CLOUDINARY_CLOUD_NAME=
+CLOUDINARY_API_KEY=
+CLOUDINARY_API_SECRET=
+
+GROQ_API_KEY=
+```
+
+---
+
+# Installation
+
+## Clone Repository
+
+```bash
+git clone <repository-url>
+```
+
+## Backend
+
+```bash
+cd backend
+
+npm install
+
+npx prisma generate
+
+npx prisma db push
+
+npm run dev
+```
+
+## Frontend
+
+```bash
+cd frontend
+
+npm install
+
+npm run dev
+```
+
+---
+
+# Security Features
+
+* JWT Authentication
+* Password Hashing using bcrypt
+* OTP Verification
+* Role-Based Authorization
+* Input Validation
+* Protected Routes
+* Secure File Uploads
+
+---
+
+# Future Enhancements
+
+* QR Code Entry Verification
+* Event Analytics
+* Real-Time Notifications
+* Payment Gateway Integration
+* Event Feedback System
+* Attendance Reports
+* Admin Dashboard
+
+---
+
+# Author
+
+Kavin Prakash
+
+Full Stack Developer
+
+Built using React, Node.js, Express, Prisma, PostgreSQL, Cloudinary, and Groq AI.
