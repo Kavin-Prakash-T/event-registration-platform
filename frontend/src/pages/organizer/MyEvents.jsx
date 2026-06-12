@@ -6,7 +6,7 @@ import toast from "react-hot-toast";
 import api from "../../api/axios";
 import Button from "../../components/Button";
 
-const CLOUD_NAME = "drx6tkqox";
+const CLOUD_NAME = import.meta.env.VITE_CLOUDINARY_NAME;
 
 const MyEvents = () => {
   const [events, setEvents] = useState([]);

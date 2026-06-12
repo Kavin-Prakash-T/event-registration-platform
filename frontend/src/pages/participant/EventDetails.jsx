@@ -5,7 +5,7 @@ import { CalendarDays, MapPin, Users } from "lucide-react";
 import api from "../../api/axios";
 import Button from "../../components/Button";
 
-const CLOUD_NAME = "YOUR_CLOUDINARY_NAME";
+const CLOUD_NAME = import.meta.env.VITE_CLOUDINARY_NAME;
 
 const EventDetails = () => {
   const { id } = useParams();
