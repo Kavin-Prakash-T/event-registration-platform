@@ -15,7 +15,18 @@ const entryRoutes = require("./routes/entryRoutes");
 const dashboardRoutes = require("./routes/dashboardRoutes");
 const chatbotRoutes = require("./routes/chatbotRoutes");
 
-app.use(cors());
+
+const corsOptions = {
+  origin: [
+    "http://localhost:5173",
+    "https://event-registration-platform-zeta.vercel.app/",
+  ],
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/events", eventRoutes);
