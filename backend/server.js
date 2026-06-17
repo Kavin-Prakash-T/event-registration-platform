@@ -19,7 +19,7 @@ const chatbotRoutes = require("./routes/chatbotRoutes");
 const corsOptions = {
   origin: [
     "http://localhost:5173",
-    "https://event-registration-platform-zeta.vercel.app/",
+    "https://event-registration-platform-zeta.vercel.app",
   ],
   credentials: true,
   methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
