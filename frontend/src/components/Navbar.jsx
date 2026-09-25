@@ -1,6 +1,16 @@
 import { CalendarDays, LogOut } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 const Navbar = () => {
+  const { logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate("/");
+  };
+
   return (
     <nav className="border-b border-gray-200 bg-white px-6 py-4">
       <div className="flex items-center justify-between">
@@ -19,7 +29,10 @@ const Navbar = () => {
           </div>
         </div>
 
-        <button className="flex items-center gap-2 rounded-lg border border-gray-300 px-3 py-2 text-sm hover:bg-gray-100">
+        <button
+          onClick={handleLogout}
+          className="flex items-center gap-2 rounded-lg border border-gray-300 px-3 py-2 text-sm hover:bg-gray-100"
+        >
           <LogOut size={16} />
           Logout
         </button>
